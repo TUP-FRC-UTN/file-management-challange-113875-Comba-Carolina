@@ -1,0 +1,49 @@
+<h1>Archivos</h1>
+<div class="d-flex justify-content-end mb-4">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Acciones
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Nuevo</a></li>
+            <li><a class="dropdown-item" href="#">Borrar</a></li>
+        </ul>
+    </div>
+</div>
+<hr>
+<table class="table table-hover d-table">
+    <thead>
+        <tr>
+            <th scope="col" class="w-10">#</th>
+            <th scope="col" class="w-25">Nombre</th>
+            <th scope="col" class="w-25">Fecha</th>
+            <th scope="col" class="w-40">Dueños</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of files; track $index) {
+        <tr>
+            <td scope="row">
+                <input type="checkbox" name="check" id="check">
+            </td>
+            <td scope="row">
+                @if(item.type ==0) {
+                <i class="bi bi-file-earmark"></i>
+                }
+                @if(item.type ==1) {
+                <i class="bi bi-folder"></i>
+                }
+                {{item.name}}
+            </td>
+            <td>
+                {{item.creation | date: 'mediumDate' }}
+            </td>
+            <td>
+                @for (owner of item.owners; track $index) {
+                <img [src]="owner.avatarUrl" [alt]="owner.name" class="rounded-circle m-1" width="30" height="30">
+                }
+            </td>
+        </tr>}
+
+    </tbody>
+</table>
