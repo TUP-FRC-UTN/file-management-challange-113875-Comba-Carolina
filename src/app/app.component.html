@@ -1,5 +1,12 @@
 <div class="container vh-100 d-flex justify-content-center align-items-center">
     <div class="w-100">
-        <app-list [files]="files"></app-list>
+        @if(mostrarLista){
+        <app-list [files]="files" (nuevoItem)="abrirForm($event)"></app-list>
+        }
+
+        @if(mostrarForm){
+        <app-form ></app-form>
+        }
+
     </div>
 </div>

@@ -14,4 +14,11 @@ import { ListComponent } from './components/list/list.component';
 })
 export class AppComponent {
   files: FileItem[] = FILE_LIST;
+
+  mostrarLista: boolean = true;
+  mostrarForm: boolean = false;
+  abrirForm(event: Event) {
+    this.mostrarLista = false;
+    this.mostrarForm = true;
+  }
 }

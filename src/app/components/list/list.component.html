@@ -5,8 +5,8 @@
             Acciones
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Nuevo</a></li>
-            <li><a class="dropdown-item" href="#">Borrar</a></li>
+            <li><a class="dropdown-item" href="#" (click)="nuevoItemEmitter()">Nuevo</a></li>
+            <li><a class="dropdown-item" href="#" (click)="borrarItems()">Borrar</a></li>
         </ul>
     </div>
 </div>
@@ -21,29 +21,51 @@
         </tr>
     </thead>
     <tbody>
-        @for (item of files; track $index) {
+        @for (item of filesTypeFolder; track $index) {
         <tr>
             <td scope="row">
-                <input type="checkbox" name="check" id="check">
+                <input type="checkbox" name="check" id="check{{$index}}" (change)="itemSeleccionado(item)">
             </td>
             <td scope="row">
-                @if(item.type ==0) {
-                <i class="bi bi-file-earmark"></i>
-                }
-                @if(item.type ==1) {
-                <i class="bi bi-folder"></i>
-                }
-                {{item.name}}
+                <i class="bi bi-folder"></i> 
+                <span [title]="item.name">
+                    {{ item.name.length > 10 ? (item.name | slice:0:10) + '...' : item.name }}
+                </span>
             </td>
             <td>
                 {{item.creation | date: 'mediumDate' }}
             </td>
             <td>
-                @for (owner of item.owners; track $index) {
+                @for (owner of item.owners.slice(0, 3); track $index) {
                 <img [src]="owner.avatarUrl" [alt]="owner.name" class="rounded-circle m-1" width="30" height="30">
+                }
+                @if(item.owners.length > 3) {
+                <span class="p-1 m-1 rounded-circle bg-body-secondary">+{{ item.owners.length - 3 }}</span>
                 }
             </td>
         </tr>}
-
+        @for (item of filesTypeFile; track $index) {
+        <tr>
+            <td scope="row">
+                <input type="checkbox" name="check" id="check{{$index}}" (change)="itemSeleccionado(item)">
+            </td>
+            <td scope="row">
+                <i class="bi bi-file-earmark"></i> 
+                <span [title]="item.name">
+                    {{ item.name.length > 10 ? (item.name | slice:0:10) + '...' : item.name }}
+                </span>
+            </td>
+            <td>
+                {{item.creation | date: 'mediumDate' }}
+            </td>
+            <td>
+                @for (owner of item.owners.slice(0, 3); track $index) {
+                <img [src]="owner.avatarUrl" [alt]="owner.name" class="rounded-circle m-1" width="30" height="30">
+                }
+                @if(item.owners.length > 3) {
+                    <span class="p-1 m-1 rounded-circle bg-body-secondary"> +{{ item.owners.length - 3 }}</span>
+                }
+            </td>
+        </tr>}
     </tbody>
 </table>
