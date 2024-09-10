@@ -1,23 +1,33 @@
 <form #form="ngForm" (ngSubmit)="enviarForm(form)">
     <div class="mb-3">
         <label class="form-label">Nombre</label>
-        <input #nombre="ngModel" [(ngModel)]="file.name" type="text" class="form-control" id="nombre" name="nombre"
-            placeholder="Ingrese el nombre">
+        <input #nombre="ngModel" [(ngModel)]="file.name" type="text" class="form-control" id="nombre" name="nombre" 
+            placeholder="Ingrese el nombre" required [ngClass]="{'is-invalid': nombre.invalid, 'is-valid': nombre.valid}">
     </div>
+    @if(nombre.getError('required') && (nombre.dirty || nombre.touched)) {
+        <div class="text-danger mb-3">El nombre es requerido</div>
+    }
     <div class="mb-3">
-        <label class="form-label">fecha</label>
-        <input type="date" class="form-control" id="fecha" name="fecha">
+        <label class="form-label">Fecha</label>
+        <input type="date" class="form-control" id="fecha" name="fecha" #fecha="ngModel" [(ngModel)]="file.creation" required [ngClass]="{'is-invalid': fecha.invalid, 'is-valid': fecha.valid}">
     </div>
+    @if(fecha.getError('required') && (fecha.dirty || fecha.touched)) {
+        <div class="text-danger mb-3">La fecha es requerida</div>
+    }
     <div class="mb-3">
         <label class="form-label">Tipo Archivo</label>
-        <select name="tipoArchivo" id="tipoArchivo" class="form-select">
-            <option value="1">Carpeta</option>
-            <option value="2">Archivo</option>
+        <select name="tipoArchivo" id="tipoArchivo" class="form-select" #tipoArchivo="ngModel" [(ngModel)]="file.type" required [ngClass]="{'is-invalid': tipoArchivo.invalid, 'is-valid': tipoArchivo.valid}">
+            <option value="" selected disabled>Seleccione un tipo...</option>
+            <option value="2">Carpeta</option>
+            <option value="3">Archivo</option>
         </select>
     </div>
+    @if(tipoArchivo.getError('required') && (tipoArchivo.dirty || tipoArchivo.touched)) {
+        <div class="text-danger mb-3">El tipo de archivo es requerido</div>
+    }
     <div class="mb-3">
         <label class="form-label">Carpetas</label>
-        <select name="carpetas" id="carpetas" class="form-select">
+        <select name="carpetas" id="carpetas" class="form-select is-valid">
             @for (item of carpetasExistentes; track $index) {
             <option value="{{item.id}}">{{item.name}}</option>
             }
@@ -25,23 +35,37 @@
     </div>
     <div class="mb-3">
         <div class="row">
-            <label class="form-label">Carpetas</label>
+            <label class="form-label">Dueños</label>
             <div class="col-11">
-                <select name="carpetas" id="carpetas" class="form-select">
+                <select name="duenios" id="duenios" class="form-select is-valid" [(ngModel)]="duenioSeleccionado">
                     @for (item of duenios; track $index) {
-                    <option value="{{item.name}}">{{item.name}}</option>
+                    <option [ngValue]="item">{{item.name}}</option>
                     }
                 </select>
             </div>
             <div class="col-1">
-                <button type="button" class="btn btn-secondary" (click)="agregarDuenio()">+</button>
+                <button type="button" class="btn btn-secondary" (click)="agregarDuenio(duenioSeleccionado)">+</button>
             </div>
         </div>
+        @if(dueniosSeleccionados.length > 0) {
+        <div class="row mt-3">
+            <div class="col-2">
+                <ul class="list-group">
+                    @for (item of dueniosSeleccionados; track $index) {
+                    <li class="list-group-item d-flex justify-content-between align-items-center m-2">
+                        <img [src]="item.avatarUrl" class="rounded-circle" width="30" height="30">{{item.name}}
+                        <button type="button" class="btn-close" (click)="quitarDuenio($index)"></button>
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        }
     </div>
     <div class="mb-3">
         <div class="row">
             <div class="col">
-                <button class="btn btn-secondary" type="button">Volver</button>
+                <button class="btn btn-secondary" type="button" (click)="volverEmitter()">Volver</button>
             </div>
             <div class="col d-flex justify-content-end">
                 <button class="btn btn-primary" type="submit">Guardar</button>

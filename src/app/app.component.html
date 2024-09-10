@@ -5,7 +5,7 @@
         }
 
         @if(mostrarForm){
-        <app-form ></app-form>
+        <app-form (volver)="abrirLista($event)" (nuevoItem)="recibirNuevoItem($event)"></app-form>
         }
 
     </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FileItem, FileOwner, FileType } from '../../../models/file.item.model';
 import { FILE_LIST, OWNERS } from '../../../data/file.storage';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -12,6 +12,9 @@ import { CommonModule } from '@angular/common';
   styleUrl: './form.component.css',
 })
 export class FormComponent implements OnInit {
+  @Output() volver = new EventEmitter();
+  @Output() nuevoItem = new EventEmitter<FileItem>();
+
   ngOnInit(): void {
     this.cargarCombo();
   }
@@ -22,6 +25,9 @@ export class FormComponent implements OnInit {
   files: FileItem[] = FILE_LIST;
 
   duenios: FileOwner[] = OWNERS;
+  dueniosSeleccionados: FileOwner[] = [];
+
+  duenioSeleccionado: FileOwner = new FileOwner();
 
   constructor() {}
 
@@ -33,6 +39,25 @@ export class FormComponent implements OnInit {
     }
   }
 
-  enviarForm(_t5: NgForm) {}
-  agregarDuenio() {}
+  agregarDuenio(duenio: FileOwner) {
+    if (!this.dueniosSeleccionados.includes(duenio)) {
+      this.dueniosSeleccionados.push(duenio);
+    }
+    this.file.owners = this.dueniosSeleccionados;
+  }
+
+  enviarForm(form: NgForm) {
+    if (form.valid) {
+      this.nuevoItem.emit();
+      confirm('Guardado con exito');
+    }
+  }
+
+  volverEmitter() {
+    this.volver.emit();
+  }
+
+  quitarDuenio(duenio: number) {
+    this.dueniosSeleccionados.splice(duenio, 1)
+  }
 }

@@ -21,4 +21,15 @@ export class AppComponent {
     this.mostrarLista = false;
     this.mostrarForm = true;
   }
+
+  abrirLista($event: any) {
+    this.mostrarLista = true;
+    this.mostrarForm = false;
+  }
+
+  recibirNuevoItem(item: FileItem) {
+    this.files.push(item);
+    this.mostrarLista = true;
+    this.mostrarForm = false;
+  }
 }

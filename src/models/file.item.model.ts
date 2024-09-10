@@ -1,15 +1,13 @@
 export class FileItem {
   id: string;
   name: string;
-  creation: Date;
+  creation?: Date;
   owners: FileOwner[];
-  type: FileType;
+  type?: FileType;
   parentId?: string;
 
   constructor() {
     this.owners = [];
-    this.creation = new Date();
-    this.type = FileType.FILE;
     this.id = '';
     this.name = '';
   }
